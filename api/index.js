@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import http from 'http';
+import userRoutes from './routes/user.route.js';
 
 dotenv.config();
 
@@ -32,3 +33,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+app.use('/api/v1/user', userRoutes);
