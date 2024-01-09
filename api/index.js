@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import http from 'http';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
+import globalErrorHandler from './controllers/error.controller.js';
 
 dotenv.config();
 
@@ -39,3 +40,5 @@ startServer();
 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/auth', authRoutes);
+
+app.use(globalErrorHandler);
