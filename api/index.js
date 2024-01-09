@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import http from 'http';
 import userRoutes from './routes/user.route.js';
+import authRoutes from './routes/auth.route.js';
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+app.use(express.json());
 
 const port = process.env.PORT || 4000;
 
@@ -35,3 +38,4 @@ const startServer = async () => {
 startServer();
 
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/auth', authRoutes);
