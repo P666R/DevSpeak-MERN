@@ -14,9 +14,7 @@ export const signup = catchAsync(async (req, res, next) => {
     email === '' ||
     password === ''
   ) {
-    return next(
-      new AppError('Please provide username, email and password', 400)
-    );
+    return next(new AppError('All fields are required', 400));
   }
 
   const hashedPassword = await bcryptjs.hash(password, 12);
