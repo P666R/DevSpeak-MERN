@@ -1,6 +1,6 @@
 export const test = (req, res) => {
   res.status(200).json({
-    status: 'Success',
+    status: 'success',
     data: {
       message: 'Api is working !!!',
     },

@@ -26,7 +26,7 @@ export const signup = catchAsync(async (req, res, next) => {
   });
 
   res.status(201).json({
-    status: 'Success',
+    status: 'success',
     data: {
       user: newUser,
     },

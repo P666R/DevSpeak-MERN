@@ -23,7 +23,7 @@ const sendErrorProd = (err, req, res) => {
     //? Programming or other unknown error: don't leak error details
     console.error('Error', { ...err });
     return res.status(500).json({
-      status: 'Error',
+      status: 'error',
       message: 'Something went wrong',
     });
   }
@@ -31,7 +31,7 @@ const sendErrorProd = (err, req, res) => {
 
 export default (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'Error';
+  err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, req, res);
