@@ -82,6 +82,8 @@ export const deleteUser = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: 'User has been deleted',
+    data: {
+      message: 'User deleted successfully',
+    },
   });
 });

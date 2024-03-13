@@ -46,35 +46,37 @@ function Header() {
         >
           {theme === 'light' ? <FaMoon /> : <FaSun />}
         </Button>
-        <Link to="/sign-in">
-          {currentUser ? (
-            <Dropdown
-              arrowIcon={false}
-              inline
-              label={
-                <Avatar alt="user" img={currentUser.profilePicture} rounded />
-              }
-            >
-              <Dropdown.Header>
-                <span className="block text-sm">
-                  Name:&nbsp;{currentUser.username}
-                </span>
-                <span className="block text-sm font-medium truncate">
-                  Email:&nbsp;{currentUser.email}
-                </span>
-              </Dropdown.Header>
-              <Link to={'/dashboard?tab=profile'}>
-                <Dropdown.Item>Profile</Dropdown.Item>
-              </Link>
-              <Dropdown.Divider />
-              <Dropdown.Item>Sign out</Dropdown.Item>
-            </Dropdown>
-          ) : (
+        {/* <Link to="/sign-in"> */}
+        {currentUser ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar alt="user" img={currentUser.profilePicture} rounded />
+            }
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">
+                Name:&nbsp;{currentUser.username}
+              </span>
+              <span className="block text-sm font-medium truncate">
+                Email:&nbsp;{currentUser.email}
+              </span>
+            </Dropdown.Header>
+            <Link to={'/dashboard?tab=profile'}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Dropdown.Item>Sign out</Dropdown.Item>
+          </Dropdown>
+        ) : (
+          <Link to="/sign-in">
             <Button gradientDuoTone="purpleToBlue" outline>
               Sign In
             </Button>
-          )}
-        </Link>
+          </Link>
+        )}
+        {/* </Link> */}
         <Navbar.Toggle />
       </div>
 
