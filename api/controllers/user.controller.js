@@ -87,3 +87,15 @@ export const deleteUser = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const signout = catchAsync(async (req, res, next) => {
+  res
+    .clearCookie('access_token')
+    .status(200)
+    .json({
+      status: 'success',
+      data: {
+        message: 'User signed out successfully',
+      },
+    });
+});
