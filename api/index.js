@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import http from 'http';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
+import postRoutes from './routes/post.route.js';
 import globalErrorHandler from './controllers/error.controller.js';
 import cookieParser from 'cookie-parser';
 
@@ -42,5 +43,6 @@ startServer();
 
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/post', postRoutes);
 
 app.use(globalErrorHandler);
