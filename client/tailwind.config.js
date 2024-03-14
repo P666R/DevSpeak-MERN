@@ -9,5 +9,5 @@ export default {
     extend: {},
   },
   /*eslint-env node*/
-  plugins: [require('flowbite/plugin')],
+  plugins: [require('flowbite/plugin'), require('tailwind-scrollbar')],
 };
