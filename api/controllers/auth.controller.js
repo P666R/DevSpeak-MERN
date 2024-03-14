@@ -58,7 +58,10 @@ export const signin = catchAsync(async (req, res, next) => {
   }
 
   //! generate JWT
-  const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+  const token = jwt.sign(
+    { id: validUser._id, isAdmin: validUser.isAdmin },
+    process.env.JWT_SECRET
+  );
 
   const cookieOptions = {
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -93,7 +96,10 @@ export const google = catchAsync(async (req, res, next) => {
 
   //! if user already exists, create a token and send it back
   if (user) {
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET
+    );
 
     const cookieOptions = {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
@@ -134,7 +140,10 @@ export const google = catchAsync(async (req, res, next) => {
       profilePicture: googlePhotoUrl,
     });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: newUser._id, isAdmin: newUser.isAdmin },
+      process.env.JWT_SECRET
+    );
 
     const cookieOptions = {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
