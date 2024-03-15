@@ -97,3 +97,33 @@ export const deletepost = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const updatepost = catchAsync(async (req, res, next) => {
+  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+    return next(
+      new AppError('You are not authorized to perform this action', 403)
+    );
+  }
+
+  const updatedPost = await Post.findByIdAndUpdate(
+    req.params.postId,
+    {
+      $set: {
+        title: req.body.title,
+        content: req.body.content,
+        image: req.body.image,
+        category: req.body.category,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      post: updatedPost,
+    },
+  });
+});
