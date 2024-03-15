@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 function DashPosts() {
-  const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState('');
+
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchPosts = async () => {
