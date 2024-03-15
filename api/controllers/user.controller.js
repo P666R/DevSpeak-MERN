@@ -99,3 +99,43 @@ export const signout = catchAsync(async (req, res, next) => {
       },
     });
 });
+
+export const getUsers = catchAsync(async (req, res, next) => {
+  const startIndex = parseInt(req.query.startIndex) || 0;
+  const limit = parseInt(req.query.limit) || 9;
+  const sortDirection = req.query.order === 'asc' ? 1 : -1;
+
+  if (!req.user.isAdmin) {
+    return next(
+      new AppError('You are not authorized to perform this action', 403)
+    );
+  }
+
+  const users = await User.find()
+    .sort({ createdAt: sortDirection })
+    .skip(startIndex)
+    .limit(limit);
+
+  const totalUsers = await User.countDocuments();
+
+  const now = new Date();
+
+  const oneMonthAgo = new Date(
+    now.getFullYear(),
+    now.getMonth() - 1,
+    now.getDate()
+  );
+
+  const lastMonthUsers = await User.countDocuments({
+    createdAt: { $gte: oneMonthAgo },
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      users,
+      totalUsers,
+      lastMonthUsers,
+    },
+  });
+});
