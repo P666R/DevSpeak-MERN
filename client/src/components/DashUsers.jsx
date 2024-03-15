@@ -16,7 +16,9 @@ function DashUsers() {
     const fetchUsers = async () => {
       try {
         const res = await fetch(`/api/v1/user/getusers`);
+
         const data = await res.json();
+
         if (res.ok && data.status === 'success') {
           const {
             data: { users },
@@ -58,7 +60,27 @@ function DashUsers() {
     }
   }
 
-  function handleDeleteUser() {}
+  async function handleDeleteUser() {
+    try {
+      const res = await fetch(`/api/v1/user/delete/${userIdToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok && data.status !== 'success') {
+        console.log(data.message);
+      } else {
+        setUsers(users.filter((user) => user._id !== userIdToDelete));
+        setShowModal(false);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">

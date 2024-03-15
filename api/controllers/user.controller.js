@@ -72,7 +72,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
 });
 
 export const deleteUser = catchAsync(async (req, res, next) => {
-  if (req.user.id !== req.params.userId) {
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
     return next(
       new AppError('You are not authorized to perform this action', 403)
     );
