@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Spinner } from 'flowbite-react';
+import { Alert, Button, Spinner } from 'flowbite-react';
 import CallToAction from '../components/CallToAction';
+import CommentSection from '../components/CommentSection';
 
 function PostPage() {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [postError, setPostError] = useState(null);
   const [post, setPost] = useState(null);
 
   const { postSlug } = useParams();
@@ -13,14 +14,14 @@ function PostPage() {
   useEffect(() => {
     const fetchPost = async () => {
       setLoading(true);
-      setError(false);
+      setPostError(null);
       try {
         const res = await fetch(`/api/v1/post/getposts?slug=${postSlug}`);
 
         const data = await res.json();
 
         if (!res.ok || data.status !== 'success') {
-          setError(true);
+          setPostError(data?.message || 'Something went wrong');
           setLoading(false);
           return;
         }
@@ -31,10 +32,10 @@ function PostPage() {
           } = data;
           setPost(posts[0]);
           setLoading(false);
-          setError(false);
+          setPostError(null);
         }
       } catch (error) {
-        setError(true);
+        setPostError(error.message);
         setLoading(false);
       }
     };
@@ -70,7 +71,7 @@ function PostPage() {
       <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span className="italic">
-          {(post && post.content.length / 1000).toFixed(0)} mins read
+          {((post && post.content.length / 1000) || 0).toFixed(0)} mins read
         </span>
       </div>
       <div
@@ -80,6 +81,13 @@ function PostPage() {
       <div className="max-w-4xl mx-auto w-full">
         <CallToAction />
       </div>
+      <CommentSection postId={post && post._id} />
+
+      {postError && (
+        <Alert color="failure" className="mt-5">
+          {postError}
+        </Alert>
+      )}
     </main>
   );
 }
