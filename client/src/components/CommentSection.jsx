@@ -1,6 +1,6 @@
 import { Alert, Button, Textarea } from 'flowbite-react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Comment from './Comment';
@@ -16,6 +16,7 @@ function CommentSection({ postId }) {
   const [commentsError, setCommentsError] = useState(null);
 
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -80,6 +81,37 @@ function CommentSection({ postId }) {
     getComments();
   }, [postId]);
 
+  async function handleLike(commentId) {
+    setCommentsError(null);
+    try {
+      if (!currentUser) {
+        return navigate('/sign-in');
+      }
+
+      const res = await fetch(`/api/v1/comment/likecomment/${commentId}`, {
+        method: 'PUT',
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.status !== 'success') {
+        return setCommentsError(data.message || 'Something went wrong');
+      }
+
+      if (res.ok && data.status === 'success') {
+        const {
+          data: { comment },
+        } = data;
+        setComments((currComments) =>
+          currComments.map((c) => (c._id === commentId ? comment : c))
+        );
+        setCommentsError(null);
+      }
+    } catch (error) {
+      setCommentsError(error.message);
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -143,8 +175,13 @@ function CommentSection({ postId }) {
             </div>
           </div>
           {comments.map((comment) => (
-            <Comment key={comment._id} comment={comment} />
+            <Comment key={comment._id} comment={comment} onLike={handleLike} />
           ))}
+          {commentsError && (
+            <Alert color="failure" className="mt-5">
+              {commentsError}
+            </Alert>
+          )}
         </>
       )}
     </div>
