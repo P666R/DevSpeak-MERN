@@ -112,6 +112,12 @@ function CommentSection({ postId }) {
     }
   }
 
+  async function handleEdit(comment) {
+    setComments((prevComment) =>
+      prevComment.map((c) => (c._id === comment._id ? comment : c))
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -175,7 +181,12 @@ function CommentSection({ postId }) {
             </div>
           </div>
           {comments.map((comment) => (
-            <Comment key={comment._id} comment={comment} onLike={handleLike} />
+            <Comment
+              key={comment._id}
+              comment={comment}
+              onLike={handleLike}
+              onEdit={handleEdit}
+            />
           ))}
           {commentsError && (
             <Alert color="failure" className="mt-5">
