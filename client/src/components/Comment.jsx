@@ -9,9 +9,10 @@ Comment.propTypes = {
   comment: PropTypes.object.isRequired,
   onLike: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
-function Comment({ comment, onLike, onEdit }) {
+function Comment({ comment, onLike, onEdit, onDelete }) {
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
@@ -134,13 +135,22 @@ function Comment({ comment, onLike, onEdit }) {
               </p>
               {currentUser &&
                 (comment.userId === currentUser._id || currentUser.isAdmin) && (
-                  <button
-                    type="button"
-                    className="text-gray-400 hover:text-blue-500"
-                    onClick={handleEdit}
-                  >
-                    Edit
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      className="text-gray-400 hover:text-blue-500"
+                      onClick={handleEdit}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="text-gray-400 hover:text-red-500"
+                      onClick={() => onDelete(comment._id)}
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
             </div>
           </>

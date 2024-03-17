@@ -93,3 +93,26 @@ export const editComment = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const deleteComment = catchAsync(async (req, res, next) => {
+  const comment = await Comment.findById(req.params.commentId);
+
+  if (!comment) {
+    return next(new AppError('Comment not found', 404));
+  }
+
+  if (comment.userId !== req.user.id && !req.user.isAdmin) {
+    return next(
+      new AppError('You are not authorized to perform this action', 403)
+    );
+  }
+
+  await Comment.findByIdAndDelete(req.params.commentId);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      message: 'Comment deleted successfully',
+    },
+  });
+});
