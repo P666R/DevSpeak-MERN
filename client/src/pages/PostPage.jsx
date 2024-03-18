@@ -3,11 +3,13 @@ import { Link, useParams } from 'react-router-dom';
 import { Alert, Button, Spinner } from 'flowbite-react';
 import CallToAction from '../components/CallToAction';
 import CommentSection from '../components/CommentSection';
+import PostCard from '../components/PostCard';
 
 function PostPage() {
   const [loading, setLoading] = useState(true);
   const [postError, setPostError] = useState(null);
   const [post, setPost] = useState(null);
+  const [recentPosts, setRecentPosts] = useState(null);
 
   const { postSlug } = useParams();
 
@@ -42,6 +44,25 @@ function PostPage() {
 
     fetchPost();
   }, [postSlug]);
+
+  useEffect(() => {
+    const fetchRecentPosts = async () => {
+      try {
+        const res = await fetch('/api/v1/post/getposts?limit=3');
+        const data = await res.json();
+
+        if (res.ok && data.status === 'success') {
+          const {
+            data: { posts },
+          } = data;
+          setRecentPosts(posts);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchRecentPosts();
+  }, []);
 
   if (loading)
     return (
@@ -82,12 +103,18 @@ function PostPage() {
         <CallToAction />
       </div>
       <CommentSection postId={post && post._id} />
-
       {postError && (
         <Alert color="failure" className="mt-5">
           {postError}
         </Alert>
       )}
+      <div className="flex flex-col justify-center items-center mb-5">
+        <h1 className="text-xl mt-5">Recent articles</h1>
+        <div className="flex flex-wrap gap-5 mt-5 justify-center">
+          {recentPosts &&
+            recentPosts.map((post) => <PostCard key={post._id} post={post} />)}
+        </div>
+      </div>
     </main>
   );
 }
