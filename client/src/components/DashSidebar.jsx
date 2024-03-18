@@ -6,6 +6,7 @@ import {
   HiOutlineUserGroup,
   HiUser,
   HiAnnotation,
+  HiChartPie,
 } from 'react-icons/hi';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,7 +57,7 @@ function DashSidebar() {
         <Sidebar.ItemGroup className="flex flex-col gap-1">
           <Link to="/dashboard?tab=profile">
             <Sidebar.Item
-              active={tab === 'profile'}
+              active={tab === 'profile' || !tab}
               icon={HiUser}
               label={currentUser.isAdmin ? 'Admin' : 'User'}
               labelColor="dark"
@@ -65,6 +66,13 @@ function DashSidebar() {
               Profile
             </Sidebar.Item>
           </Link>
+          {currentUser && currentUser.isAdmin && (
+            <Link to="/dashboard?tab=dash">
+              <Sidebar.Item active={tab === 'dash'} icon={HiChartPie} as="div">
+                Dashboard
+              </Sidebar.Item>
+            </Link>
+          )}
           {currentUser.isAdmin && (
             <Link to="/dashboard?tab=posts">
               <Sidebar.Item
