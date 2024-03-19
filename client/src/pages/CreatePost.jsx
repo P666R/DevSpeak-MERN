@@ -114,7 +114,7 @@ function CreatePost() {
             }
           >
             <option value="uncategorized">Select a category</option>
-            <option value="javascript">Javascript</option>
+            <option value="javascript">JavaScript</option>
             <option value="typescript">TypeScript</option>
             <option value="nodejs">NodeJS</option>
             <option value="reactjs">ReactJS</option>
